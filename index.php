@@ -35,6 +35,7 @@
                                 include ('config/conn.php'); //memangggil conn untuk menghubungkan ke database
                                 $queri = "SELECT toko.KdToko as KodeToko, toko.NamaToko, barang.KdBarang as KodeBarang, barang.NamaBarang AS NamaBarang, SUM(penjualan_detail.Qty) AS Qty, (SUM(penjualan_detail.Qty)*penjualan_detail.HargaSatuan) as Nilai from toko join penjualan_header on toko.KdToko = penjualan_header.KdToko JOIN penjualan_detail ON penjualan_header.NoFaktur = penjualan_detail.NoFaktur JOIN barang on penjualan_detail.KdBarang = barang.KdBarang GROUP by kodetoko, kodebarang ORDER BY toko.KdToko ASC";
                                 $counter = 1;
+                                $total = 0;
                                 $hasil = $konek->query($queri); //variabel penampung
                                 if ($hasil === false) {
                                     trigger_error('Perintah SQL salah! ' . $queri . 'Error: ' . $konek->error, E_USER_ERROR);
@@ -42,6 +43,7 @@
                                 }else{
                                     //jika perintah SQL benar maka akan memanggil data sesuai pada database
                                     while ($data = $hasil->fetch_array()){
+                                        $total += $data['Nilai'];
                                         echo "<tr>
                                             <td>".$counter."</td>
                                     		<td>".$data['KodeToko']."</td>
@@ -51,8 +53,18 @@
                                     		<td>".$data['Qty']."</td>
                                     		<td>".$data['Nilai']."</td>"?>
                                     	</tr>
-                                    <?php $counter++; }
-                                }?>
+                                        <?php $counter++; 
+                                    }
+                                }
+                            ?>
+                            <tr>
+                                <td colspan=6 style="text-align:right"><b>Total</b></td>
+                                <td>
+                                    <?php
+                                        echo $total;
+                                    ?>
+                                </td>
+                            </tr>
                         </tbody>
 					</table>
                 </div>
