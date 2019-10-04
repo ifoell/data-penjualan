@@ -102,9 +102,6 @@
       <!-- Page level plugins -->
   <script src="_resource/vendor/chart.js/Chart.min.js"></script>
 
-  <!-- Page level custom scripts -->
-  <script src="_resource/js/data-index.js"></script>
-
 </body>
 
 </html>
