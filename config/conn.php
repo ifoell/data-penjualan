@@ -1,13 +1,16 @@
 <?php
-	$server ="localhost"; //nama server database
-	$user ="root"; //nama user database
-	$passwd =""; //password database
-	$dbs ="penjualan"; //nama database yang digunakan
 
-	$konek=mysqli_connect($server, $user, $passwd, $dbs);
-	
-	// cek koneksi
-	if (mysqli_connect_errno()) {
-		echo "Gagal menghubungi Database: ". mysqli_connect_error();
-	}
-?>
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "penjualan";
+
+// create connection
+$connect = new mysqli($servername, $username, $password, $dbname);
+
+// check connection
+if ($connect->connect_error) {
+    die("Connection Failed : " . $connect->connect_error);
+} else {
+    // echo "Successfully Connected";
+}

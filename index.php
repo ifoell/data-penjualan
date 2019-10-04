@@ -1,89 +1,110 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Data Penjualan</title>
-	<link rel="stylesheet" href="_resource/dist/css/global.css" type="text/css">
-	<link href="_resource/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-	<link href="_resource/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="_resource/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
-    <link href="_resource/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
-</head>
-<body class="backg col-md-10 col-md-offset-1">
-	<a class="putih" href="index.php"><h1 class="page-header" align="center">Data Penjualan</h1></a>
+<?php
+    include ('header.php');
+?>
+  
 
-	<div class="panel panel-primary">
-    	<div class="panel-heading">Tabel Data Penjualan</div>
-        <!-- /.panel-heading -->
-            <div class="panel-body">
-                <div class="dataTable_wrapper responsive">
-                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Kode Toko</th>
-                                <th>Nama Toko</th>
-                                <th>Kode Barang</th>
-                                <th>Nama Barang</th>
-                                <th>Quantity</th>
-                                <th>Nilai</th>
-                            </tr>
-                        </thead>
-                    	<tbody>
-                            <?php
-                                include ('config/conn.php'); //memangggil conn untuk menghubungkan ke database
-                                $queri = "SELECT toko.KdToko as KodeToko, toko.NamaToko, barang.KdBarang as KodeBarang, barang.NamaBarang AS NamaBarang, SUM(penjualan_detail.Qty) AS Qty, (SUM(penjualan_detail.Qty)*penjualan_detail.HargaSatuan) as Nilai from toko join penjualan_header on toko.KdToko = penjualan_header.KdToko JOIN penjualan_detail ON penjualan_header.NoFaktur = penjualan_detail.NoFaktur JOIN barang on penjualan_detail.KdBarang = barang.KdBarang GROUP by kodetoko, kodebarang ORDER BY toko.KdToko ASC";
-                                $counter = 1;
-                                $total = 0;
-                                $hasil = $konek->query($queri); //variabel penampung
-                                if ($hasil === false) {
-                                    trigger_error('Perintah SQL salah! ' . $queri . 'Error: ' . $konek->error, E_USER_ERROR);
-                                    //pesan jika tidak perintah SQL salah
-                                }else{
-                                    //jika perintah SQL benar maka akan memanggil data sesuai pada database
-                                    while ($data = $hasil->fetch_array()){
-                                        $total += $data['Nilai'];
-                                        echo "<tr>
-                                            <td>".$counter."</td>
-                                    		<td>".$data['KodeToko']."</td>
-                                    		<td>".$data['NamaToko']."</td>
-                                    		<td>".$data['KodeBarang']."</td>
-                                    		<td>".$data['NamaBarang']."</td>
-                                    		<td>".$data['Qty']."</td>
-                                    		<td>".$data['Nilai']."</td>"?>
-                                    	</tr>
-                                        <?php $counter++; 
-                                    }
-                                }
-                            ?>
-                            <tr>
-                                <td colspan=6 style="text-align:right"><b>Total</b></td>
-                                <td>
-                                    <?php
-                                        echo $total;
-                                    ?>
-                                </td>
-                            </tr>
-                        </tbody>
-					</table>
+<?php
+    include ('container.php');
+?>
+<!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="index.php">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link" href="barang.php" aria-expanded="true">
+          <i class="fas fa-fw fa-archive"></i>
+          <span>Barang</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="toko.php" aria-expanded="true">
+          <i class="fas fa-fw fa-archway"></i>
+          <span>Toko</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="penjualan.php" aria-expanded="true">
+          <i class="fas fa-fw fa-book"></i>
+          <span>Penjualan</span>
+        </a>
+      </li>
+
+      
+<!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <div class="container-fluid">
+
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+          </div>
+
+          <div class="row">
+
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+              <div class="card shadow mb-4">
+                <!-- Card Body -->
+                <div class="card-body">
+                  <h2>Selamat Datang di Aplikasi Data Penjualan</h2>
                 </div>
-                <!-- /.table-responsive -->
+              </div>
             </div>
-            <!-- /.panel-body -->
-        </div>
-	</body>
 
-	<script src="_resource/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="_resource/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="_resource/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
-    <script src="_resource/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
-    <script src="_resource/dist/js/global.js"></script>
-    <script>
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
-            responsive: true
-        });
-    });
-    </script>
+            
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+<?php
+    include ('footer.php');
+?>
+      <!-- Page level plugins -->
+  <script src="_resource/vendor/chart.js/Chart.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="_resource/js/data-index.js"></script>
+
+</body>
+
 </html>
